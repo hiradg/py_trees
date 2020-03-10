@@ -381,25 +381,77 @@ def dot_tree(
             print("{}".format(py_trees.display.dot_graph(root).to_string()))
     """
     def get_node_attributes(node):
-        blackbox_font_colours = {common.BlackBoxLevel.DETAIL: "dodgerblue",
+        blackbox_font_colours = {common.BlackBoxLevel.DETAIL: "white",
                                  common.BlackBoxLevel.COMPONENT: "lawngreen",
                                  common.BlackBoxLevel.BIG_PICTURE: "white"
                                  }
         if isinstance(node, composites.Chooser):
-            attributes = ('doubleoctagon', 'cyan', 'black')  # octagon
+            if node.status==common.Status.SUCCESS:
+                attributes = ('doubleoctagon', 'green', 'white')  # octagon
+            elif node.status==common.Status.FAILURE:
+                attributes = ('doubleoctagon', 'red', 'white')  # octagon
+            elif node.status==common.Status.RUNNING:
+                attributes = ('doubleoctagon', 'blue', 'white')  # octagon
+            else:
+                attributes = ('doubleoctagon', 'gray31', 'white')  # octagon
         elif isinstance(node, composites.Selector):
-            attributes = ('octagon', 'cyan', 'black')  # octagon
+            if node.status==common.Status.SUCCESS:
+                attributes = ('octagon', 'green', 'white')  # octagon
+            elif node.status==common.Status.FAILURE:
+                attributes = ('octagon', 'red', 'white')  # octagon
+            elif node.status==common.Status.RUNNING:
+                attributes = ('octagon', 'blue', 'white')  # octagon
+            else:
+                attributes = ('octagon', 'gray31', 'white')  # octagon
         elif isinstance(node, composites.Sequence):
-            attributes = ('box', 'orange', 'black')
+            if node.status==common.Status.SUCCESS:
+                attributes = ('record', 'green', 'white') 
+            elif node.status==common.Status.FAILURE:
+                attributes = ('record', 'red', 'white')
+            elif node.status==common.Status.RUNNING:
+                attributes = ('record', 'blue', 'white')
+            else:
+                attributes = ('record', 'gray31', 'white')
         elif isinstance(node, composites.Parallel):
-            attributes = ('parallelogram', 'gold', 'black')
+            if node.status==common.Status.SUCCESS:
+                attributes = ('parallelogram', 'green', 'white') 
+            elif node.status==common.Status.FAILURE:
+                attributes = ('parallelogram', 'red', 'white')
+            elif node.status==common.Status.RUNNING:
+                attributes = ('parallelogram', 'blue', 'white')
+            else:
+                attributes = ('parallelogram', 'gray31', 'white')
         elif isinstance(node, decorators.Decorator):
-            attributes = ('ellipse', 'ghostwhite', 'black')
+            attributes = ('Mdiamond', 'ghostwhite', 'black')
+            """
+            if node.status==common.Status.SUCCESS:
+                attributes = ('Mdiamond', 'green', 'white') 
+            elif node.status==common.Status.FAILURE:
+                attributes = ('Mdiamond', 'red', 'white')
+            elif node.status==common.Status.RUNNING:
+                attributes = ('Mdiamond', 'blue', 'white')
+            else:
+                attributes = ('Mdiamond', 'ghostwhite', 'black')
+            """
         else:
-            attributes = ('ellipse', 'gray', 'black')
+            if node.status==common.Status.SUCCESS:
+                attributes = ('ellipse', 'green', 'white') 
+            elif node.status==common.Status.FAILURE:
+                attributes = ('ellipse', 'red', 'white')
+            elif node.status==common.Status.RUNNING:
+                attributes = ('ellipse', 'blue', 'white')
+            else:
+                attributes = ('ellipse', 'gray', 'black')
         try:
             if node.blackbox_level != common.BlackBoxLevel.NOT_A_BLACKBOX:
-                attributes = (attributes[0], 'gray20', blackbox_font_colours[node.blackbox_level])
+                if node.status==common.Status.SUCCESS:
+                    attributes = ("ellipse", 'green', 'white')
+                elif node.status==common.Status.FAILURE:
+                    attributes = ("ellipse", 'red', 'white')
+                elif node.status==common.Status.RUNNING:
+                    attributes = ("ellipse", 'blue', 'white')
+                else:
+                    attributes = ("ellipse", 'black', blackbox_font_colours[node.blackbox_level])
         except AttributeError:
             # it's a blackboard client, not a behaviour, just pass
             pass
